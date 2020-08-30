@@ -2,13 +2,14 @@ import os
 import json
 import re
 
+
 arreglo = []
+count_reg = 0
 
 def main():
-    salir = False
-    
+    salir = False  
     while not salir:
-        tmpentrada = input(">>")
+        tmpentrada = input("Practica_LFP>")
         entrada = tmpentrada.split(" ")
 
         if entrada[0].lower() == ("cargar").lower():
@@ -16,13 +17,13 @@ def main():
         elif entrada[0].lower() ==("seleccionar").lower():
             seleccion(tmpentrada)
         elif entrada[0].lower() ==("maximo").lower():
-            print("sptm es el max")
+            maximo(entrada[1])
         elif entrada[0].lower() ==("minimo").lower():
-            print("sptm es el min")
+            minimo(entrada[1])
         elif entrada[0].lower() ==("suma").lower():
-            print("sptm esta sumando")
+            suma(entrada[1])
         elif entrada[0].lower() ==("cuenta").lower():
-            print("sptm esta contando")
+            print("La cantidad de regisros agregaso hasta ahora es de : " + str(len(arreglo)))
         elif entrada[0].lower() ==("reportar").lower():
             print("sptm esta reportando")
         elif entrada[0].lower() ==("salir").lower():
@@ -40,57 +41,87 @@ def readfil(archivos):
         with open (path) as data: 
             tmpFile = json.loads(data.read())   
             for newData in tmpFile:              
-                arreglo.append(newData)           
+                arreglo.append(newData)
     print("Archivos cargados con exito\n")
+
 #SELECCIONAR nombre, edad, promedio, activo DONDE nombre = “Francisco”
-#SELECCIONAR * Donde
+#SELECCIONAR * DONDE promedio = 14.45
 #SELECCIONAR nombre, edad DONDE promedio = 14.45
 
 def seleccion(cadena):
     #guardar en arreglo datos 
+    allatrib = ['nombre',"edad",'activo','promedio']
     y = cadena.replace(",", "")  
     z = y.replace("\"", "")        
     list_atrib = z.split(" ")
     list_atrib.pop(0)
     latrib = list_atrib[:]
-    for i in range(4):
-        latrib.pop(-1)
     print()
     if list_atrib[0] == "*":
-        pass
-    else:
-        #recorre los atributos para obtener la informacion
-        for data in arreglo:                                        
-            if list_atrib[-1] == data.get("nombre"):
-                for atributo in latrib:
-                    if atributo.lower() != ("donde").lower():
-                        print(atributo + ":  " + str(data.get(atributo)))
-                    else:
-                        break
+        match = re.search("donde",cadena,re.IGNORECASE)
+        if match:
+           buscarCondicion(allatrib,list_atrib[-1],list_atrib[-3])
+        else:
+            for data in arreglo:  
+                for atributo in allatrib:                                      
+                    print(atributo + ":  " + str(data.get(atributo)))
                 print("-------------------------------------------\n")
+    else:
+        for i in range(4):
+            latrib.pop(-1)
+        buscarCondicion(latrib,list_atrib[-1],list_atrib[-3])
 
+def buscarCondicion(lista_atributos, atrib_buscar, name_atrib):
+    for data in arreglo:                                        
+        if str(atrib_buscar) == str(data.get(name_atrib)):
+            for atributo in lista_atributos:
+                print(atributo + ":  " + str(data.get(atributo)))
+            print("-------------------------------------------\n")
+
+def maximo(buscar_max):
+    print()
+    if buscar_max == "edad":
+            tmp = max(arreglo, key=lambda x:x["edad"])
             
+            print(tmp.get("nombre"))
+            print(tmp.get("edad"))
+            print("----------------------------------")
+    else:
+            tmp2 = max(arreglo, key=lambda x:x["promedio"]) 
+            print(tmp2.get("nombre"))
+            print(tmp2.get("promedio"))
+            print("----------------------------------")
 
-        
+def minimo(buscar_min):
+    print()
+    if buscar_min == "edad":
+            tmp = min(arreglo, key=lambda x:x["edad"])
+            print(tmp.get("nombre"))
+            print(tmp.get("edad"))
+            print("----------------------------------")
+    else:
+            tmp2 = min(arreglo, key=lambda x:x["promedio"]) 
+            print(tmp2.get("nombre"))
+            print(tmp2.get("promedio"))
+            print("----------------------------------")
 
-    #if condicion == True:
+def suma(valores_suma):
+    print()
+    suma = 0
+    promedio = 0
+    if valores_suma == "edad":
+            for dato in arreglo:
+                suma = suma + dato.get("edad")
+            print("La suma total de las edades es: " + str(suma))
+            
+            print("----------------------------------")
+    else:
+            for dato in arreglo:
+                promedio = promedio + dato.get("promedio")
+            print("La suma total de los promedios es: " + str(promedio))
+            
+            print("----------------------------------")
 
-def buscarCondicion(cadenaentrante):
-    buscar  = re.search("donde",cadenaentrante, re.IGNORECASE)
-    if buscar:
-        patron2 = ""
-        buscar  = re.search("donde nombre",cadenaentrante, re.IGNORECASE)
-    else :
-        print("busca por promedio el prro")
-        
-   
-
-#for libro in lista:
- #           print("Libro No.: " + str(cont))
-  #          print("Titulo de libro : " + libro.get("nombre"))
-   #         print("Autor : "+ libro.get("autor"))
-    #        print("Genero : "+ libro.get("genero"))
-     #       print("Fecha de Publicacion: " + str(libro.get("fecha")))
 
 
 main()
