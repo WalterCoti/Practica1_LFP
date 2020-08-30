@@ -31,48 +31,56 @@ def main():
 #funcion para abrir archivos
 #agregar los elementos al arreglo
 def readfil(archivos):
-    x = archivos.replace(",", " ")          
+    x = archivos.replace(",", "")          
     listFiles = x.split(" ")
     listFiles.pop(0)
-
     for file in listFiles:     
-        print(file)
         my_path = os.path.abspath(os.path.dirname(__file__))
         path = os.path.join(my_path, str(file))
-        print(path)
         with open (path) as data: 
             tmpFile = json.loads(data.read())   
             for newData in tmpFile:              
                 arreglo.append(newData)           
-                print(arreglo)
-
+    print("Archivos cargados con exito\n")
 #SELECCIONAR nombre, edad, promedio, activo DONDE nombre = “Francisco”
 #SELECCIONAR * Donde
 #SELECCIONAR nombre, edad DONDE promedio = 14.45
 
 def seleccion(cadena):
     #guardar en arreglo datos 
-    y = cadena.replace(",", "")          
-    list_atrib = y.split(" ")
+    y = cadena.replace(",", "")  
+    z = y.replace("\"", "")        
+    list_atrib = z.split(" ")
     list_atrib.pop(0)
-    print(list_atrib)
-    #tmp_cond = re.findall("Donde",cadena, re.IGNORECASE)
-
+    latrib = list_atrib[:]
+    for i in range(4):
+        latrib.pop(-1)
+    print()
     if list_atrib[0] == "*":
-        print("seleccione todos los atributos")
-        buscarCondicion(cadena)
+        pass
     else:
-        print("no pues toma los atributos")
-        buscarCondicion(cadena)
+        #recorre los atributos para obtener la informacion
+        for data in arreglo:                                        
+            if list_atrib[-1] == data.get("nombre"):
+                for atributo in latrib:
+                    if atributo.lower() != ("donde").lower():
+                        print(atributo + ":  " + str(data.get(atributo)))
+                    else:
+                        break
+                print("-------------------------------------------\n")
+
+            
+
         
 
     #if condicion == True:
 
 def buscarCondicion(cadenaentrante):
-    print("me salio esto --> " + cadenaentrante)
-    if re.search(r"^donde.nombre$", cadenaentrante):
-        print("encuentra el nombre | busca por nombre")
-    elif re.search(r"^donde.promedio$", cadenaentrante):
+    buscar  = re.search("donde",cadenaentrante, re.IGNORECASE)
+    if buscar:
+        patron2 = ""
+        buscar  = re.search("donde nombre",cadenaentrante, re.IGNORECASE)
+    else :
         print("busca por promedio el prro")
         
    
@@ -83,8 +91,6 @@ def buscarCondicion(cadenaentrante):
    #         print("Autor : "+ libro.get("autor"))
     #        print("Genero : "+ libro.get("genero"))
      #       print("Fecha de Publicacion: " + str(libro.get("fecha")))
-
-
 
 
 main()
