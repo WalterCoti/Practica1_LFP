@@ -13,21 +13,38 @@ def main():
         print()
         tmpentrada = input("Practica_LFP>")
         entrada = tmpentrada.split(" ")
-
         if entrada[0].lower() == ("cargar").lower():
-            readfil(tmpentrada)
+            try:
+                readfil(tmpentrada)
+            except:
+                print("Es necesario ingresar el nombre del archivo correcto")
         elif entrada[0].lower() ==("seleccionar").lower():
-            seleccion(tmpentrada)
+            try:
+                seleccion(tmpentrada)
+            except:
+                print("Hacen falta parametros")
         elif entrada[0].lower() ==("maximo").lower():
-            maximo(entrada[1])
+            try:
+                maximo(entrada[1])
+            except:
+                print("hacen Falta Parametros")
         elif entrada[0].lower() ==("minimo").lower():
-            minimo(entrada[1])
+            try:
+                 minimo(entrada[1])
+            except:
+                print("hacen Falta Parametros")
         elif entrada[0].lower() ==("suma").lower():
-            suma(entrada[1])
+            try:
+                suma(entrada[1])
+            except:
+                print("hacen Falta Parametros")
         elif entrada[0].lower() ==("cuenta").lower():
             print("La cantidad de regisros agregaso hasta ahora es de : " + str(len(arreglo)))
         elif entrada[0].lower() ==("reportar").lower():
-            reporte(entrada[1])
+            try:
+                reporte(entrada[1])
+            except:
+                print("Es necesario ingresar un numero seguido del comando")
         elif entrada[0].lower() ==("salir").lower():
             salir = True
 
@@ -59,7 +76,7 @@ def seleccion(cadena):
         else:
             for data in arreglo:  
                 for atributo in allatrib:                                      
-                    print(atributo + ":  " + str(data.get(atributo)))
+                    print(atributo + ":  " + str(data.get(atributo.lower)))
                 print("-------------------------------------------\n")
     else:
         for i in range(4):
@@ -68,14 +85,14 @@ def seleccion(cadena):
 
 def buscarCondicion(lista_atributos, atrib_buscar, name_atrib):
     for data in arreglo:                                        
-        if str(atrib_buscar) == str(data.get(name_atrib)):
+        if str(atrib_buscar.lower()) == str(data.get(name_atrib.lower())):
             for atributo in lista_atributos:
                 print(atributo + ":  " + str(data.get(atributo)))
             print("-------------------------------------------\n")
 
 def maximo(buscar_max):
     print()
-    if buscar_max == "edad":
+    if (buscar_max).lower() == ("edad").lower():
             tmp = max(arreglo, key=lambda x:x["edad"])
             
             print(tmp.get("nombre"))
@@ -89,7 +106,7 @@ def maximo(buscar_max):
 
 def minimo(buscar_min):
     print()
-    if buscar_min == "edad":
+    if (buscar_min).lower() == ("edad").lower():
             tmp = min(arreglo, key=lambda x:x["edad"])
             print(tmp.get("nombre"))
             print(tmp.get("edad"))
@@ -104,7 +121,7 @@ def suma(valores_suma):
     print()
     suma = 0
     promedio = 0
-    if valores_suma == "edad":
+    if (valores_suma).lower() == ("edad").lower():
             for dato in arreglo:
                 suma = suma + dato.get("edad")
             print("La suma total de las edades es: " + str(suma))
@@ -118,6 +135,7 @@ def suma(valores_suma):
             print("----------------------------------")
 
 def reporte(numero_reporte):
+  try:  
     my_path = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(my_path, "reporte.html")
     with  open(path, 'w+') as file_reporte:
@@ -132,5 +150,7 @@ def reporte(numero_reporte):
         file_reporte.close()
     webbrowser.open_new(path)
     print("Reporte Creado con Exito")
+  except:
+      print("El numero a reportar excede el numero de registros en memoria")
 
 main()
