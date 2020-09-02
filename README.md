@@ -36,7 +36,6 @@ Permite encontrar el valor máximo o mínimo que se encuentre en el atributo de 
 MAXIMO edad               |  MINIMO edad
 MAXIMO promedio           |  MINIMO promedio
 ```
-Please make sure to update tests as appropriate.
 
 * ## SUMA
 Permite obtener la suma de todos los valores de un atributo especificado en el comando. El patrón que sigue este comando es:
@@ -59,5 +58,7 @@ registros.
 REPORTAR N
 ```
 
+
+* Todas los comandos a excepcion de **REPORTAR** imprimiran el resultado en consola.
 ### PRACTICA_LFP
 201700522
