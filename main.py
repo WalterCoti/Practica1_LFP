@@ -1,14 +1,16 @@
 import os
 import json
 import re
+import webbrowser
+import report
 
-
+allatrib = ['nombre',"edad",'activo','promedio']
 arreglo = []
-count_reg = 0
 
 def main():
     salir = False  
     while not salir:
+        print()
         tmpentrada = input("Practica_LFP>")
         entrada = tmpentrada.split(" ")
 
@@ -25,12 +27,10 @@ def main():
         elif entrada[0].lower() ==("cuenta").lower():
             print("La cantidad de regisros agregaso hasta ahora es de : " + str(len(arreglo)))
         elif entrada[0].lower() ==("reportar").lower():
-            print("sptm esta reportando")
+            reporte(entrada[1])
         elif entrada[0].lower() ==("salir").lower():
             salir = True
 
-#funcion para abrir archivos
-#agregar los elementos al arreglo
 def readfil(archivos):
     x = archivos.replace(",", "")          
     listFiles = x.split(" ")
@@ -44,13 +44,8 @@ def readfil(archivos):
                 arreglo.append(newData)
     print("Archivos cargados con exito\n")
 
-#SELECCIONAR nombre, edad, promedio, activo DONDE nombre = “Francisco”
-#SELECCIONAR * DONDE promedio = 14.45
-#SELECCIONAR nombre, edad DONDE promedio = 14.45
-
 def seleccion(cadena):
     #guardar en arreglo datos 
-    allatrib = ['nombre',"edad",'activo','promedio']
     y = cadena.replace(",", "")  
     z = y.replace("\"", "")        
     list_atrib = z.split(" ")
@@ -122,6 +117,20 @@ def suma(valores_suma):
             
             print("----------------------------------")
 
-
+def reporte(numero_reporte):
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "reporte.html")
+    with  open(path, 'w+') as file_reporte:
+        file_reporte.write(report.codinicio)
+        for i in range(int(numero_reporte)):    
+            file_reporte.write("<tr>") 
+            file_reporte.write("<td>" + str(i+1) + "</td>")                                    
+            for atributo in allatrib:
+                file_reporte.write("<td>" + str(arreglo[i].get(atributo)) + "</td>" )
+            file_reporte.write("</tr>")
+        file_reporte.write(report.final_hmtl)
+        file_reporte.close()
+    webbrowser.open_new(path)
+    print("Reporte Creado con Exito")
 
 main()
